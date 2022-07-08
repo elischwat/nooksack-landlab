@@ -21,6 +21,9 @@ NLCD_2016_Land_Cover_L48_20190424.zip
 Downloaded from...
 https://www.mrlc.gov/data?f%5B0%5D=category%3Aland%20cover
 
+# Modifying scripts to run on your local machine
+---
+Inline comments saying "MODIFY THIS" in the python scripts indicate where one must change a file/folder path to their local path.
 
 # Generate Input Data for the NF Nooksack Landlab Model
 ---
