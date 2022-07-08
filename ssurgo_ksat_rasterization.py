@@ -2,43 +2,32 @@
 
 import pandas as pd
 import rasterio
-from matplotlib import pyplot
-import holoviews as hv
 import numpy as np
-from holoviews.operation.datashader import rasterize
-hv.extension('bokeh')
+import rioxarray as rix
+import geopandas as gpd
+import os
+
+# MODIFY THIS
+data_path = "/Volumes/GoogleDrive/My Drive/nooksack-landlab"
 
 # ## Open the gSSURGO mukey and ksat table created in the other notebook
 
 ksat_table = pd.read_csv('mukey_ksat.csv')
 
-ksat_table
+# ## Open the gSSURGO 10m mukey raster
+src = os.path.join(data_path, "MapunitRaster_10m.tif")
+raster_src = rix.open_rasterio(src, chunk=True)
+watershed_src = os.path.join(data_path, "MapunitRaster_10m_nooksack.tif")
+boundary = gpd.read_file(os.path.join(data_path, "nooksack.geojson")).to_crs(raster_src.rio.crs)
 
-# ## Open the gSSURGO 1m mukey raster
-
-src = rasterio.open("/Users/elischwat/Downloads/MapunitRaster_10m.tif")
-data_array = src.read(1)
-img = hv.Image(data_array)
-rasterize(img)
-
-# ## Crop the mukey raster to the nf nooksack boundary
-
-# ! gdalwarp -crop_to_cutline \
-#     -cutline nf_nooksack.geojson \
-#     /Users/elischwat/Downloads/MapunitRaster_10m.tif \
-#     /Users/elischwat/Downloads/MapunitRaster_10m_nf_nooksack.tif
-
-
-src = rasterio.open("/Users/elischwat/Downloads/MapunitRaster_10m_nf_nooksack.tif")
-data_array = src.read(1)
-img = hv.Image(data_array)
-rasterize(img)
+# ## Crop the mukey raster to the nooksack boundary
+raster_src.rio.clip(boundary.geometry).rio.to_raster(
+    watershed_src
+)
 
 # ## Replace mukey raster values with associated ksat values
-
-mukey_raster = rasterio.open("/Users/elischwat/Downloads/MapunitRaster_10m_nf_nooksack.tif")
+mukey_raster = rasterio.open(watershed_src)
 mukey_array = mukey_raster.read(1)
-
 all_mukeys = list(set(mukey_array.flatten()))
 
 # #### Find which mukeys have associated ksat data in our generated table
@@ -82,8 +71,8 @@ with rasterio.Env():
         count=1,
         compress='lzw',
         nodata = nodata_value)
-    
-    outfile='/Users/elischwat/Downloads/ksat_raster_10m_nf_nooksack.tif'
+    outfile = os.path.join(data_path, "ksat_raster_10m_nooksack.tif")
+    print(f"Saving to {outfile}")
     with rasterio.open(
         outfile, 
         'w', **profile) as dst:

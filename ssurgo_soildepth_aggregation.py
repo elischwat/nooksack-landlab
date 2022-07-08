@@ -2,9 +2,11 @@ import geopandas as gpd
 import pandas as pd
 import numpy as np
 
-# geometry_table = gpd.read_file("/Users/elischwat/Downloads/gSSURGO_WA/gSSURGO_WA.gdb", layer='mupolygon')
-component_table = gpd.read_file("/Users/elischwat/Downloads/gSSURGO_WA/gSSURGO_WA.gdb", layer='component')
-param_table = gpd.read_file("/Users/elischwat/Downloads/gSSURGO_WA/gSSURGO_WA.gdb", layer='chorizon')
+# MODIFY THIS
+gdb_path = "/Users/elischwat/Downloads/gSSURGO_WA/gSSURGO_WA.gdb"
+
+component_table = gpd.read_file(gdb_path, layer='component')
+param_table = gpd.read_file(gdb_path, layer='chorizon')
 
 component_param_table = pd.merge(
     component_table[['mukey','cokey', 'majcompflag', 'comppct_r']],
