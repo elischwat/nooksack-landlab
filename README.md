@@ -1,6 +1,6 @@
 # Download Raw Data Sources for the Nooksack Watershed
----
 Download the following datasets from external sources. Unzip all the files when they are done downloading so that the following steps can be completed. Place them in a single directory.
+
 ## GSSURGO
 gSSURGO_WA.zip
 Downloaded from...
@@ -15,20 +15,18 @@ https://water.usgs.gov/wsc/map_index.html
 Download data for that area here
 http://prd-tnm.s3-website-us-west-2.amazonaws.com/?prefix=StagedProducts/Hydrography/NHD/HU4/HighResolution/GDB/
 
-
 ## National Land Cover Dataset
 NLCD_2016_Land_Cover_L48_20190424.zip
 Downloaded from...
 https://www.mrlc.gov/data?f%5B0%5D=category%3Aland%20cover
 
-# Modifying scripts to run on your local machine
----
-Inline comments saying "MODIFY THIS" in the python scripts indicate where one must change a file/folder path to their local path.
-
-# Generate Input Data for the NF Nooksack Landlab Model
----
+# Generate data for the Nooksack watershed
 These steps take the raw data that we downloaded from external sources and generates the data we need 
 to actually run Landlab.
+
+## Modifying scripts to run on your local machine
+Inline comments saying "MODIFY THIS" in the python scripts indicate where one must change a file/folder path to their local path.
+
 ## Boundary shapefile
 Generate the polygon boundary of the NF Nooksack watershed by running the python script.
 This script simply takes two watersheds from the HU4 level (upper and lower NF Nooksack watersheds)
